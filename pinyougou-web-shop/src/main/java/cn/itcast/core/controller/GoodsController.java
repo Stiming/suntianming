@@ -59,5 +59,6 @@ public class GoodsController {
     @RequestMapping("/findOne")
     public GoodsVo findOne(Long id){
         return goodsService.findOne(id);
+
     }
 }
