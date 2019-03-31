@@ -151,6 +151,7 @@ app.controller('goodsController' ,function($scope,$controller,$location,typeTemp
 		//商品分类服务层  查询所有商品分类（父ID为0）
 		itemCatService.findByParentId(0).success(function(response){//List<ItemCat>
 			$scope.itemCat1List = response;//List<ItemCat>
+
 		});
 
 
