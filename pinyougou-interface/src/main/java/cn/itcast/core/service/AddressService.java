@@ -16,4 +16,10 @@ public interface AddressService {
     List<Cities> selectCityList(String provinceid);
 
     List<Areas> selectTownList(String cityid);
+
+    void save(Address address);
+
+    void setdefault(String id, String name);
+
+    void deleteAddress(Address address);
 }

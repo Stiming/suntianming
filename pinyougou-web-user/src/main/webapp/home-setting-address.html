@@ -19,7 +19,7 @@
 	<script type="text/javascript" src="js/service/addressService.js"></script>
 </head>
 
-<body  ng-app="pinyougou" ng-controller="addressController" ng-init="selectProvincesList()">
+<body  ng-app="pinyougou" ng-controller="addressController" ng-init="selectProvincesList();showName();findAddressList()">
     <!-- 头部栏位 -->
     <!--页面顶部-->
 <div id="nav-bottom">
@@ -152,7 +152,7 @@ $(function(){
 <script type="text/javascript" src="pages/userInfo/distpicker.data.js"></script>
 <script type="text/javascript" src="pages/userInfo/distpicker.js"></script>
 <script type="text/javascript" src="pages/userInfo/main.js"></script>
-</body>
+
     <!--header-->
     <div id="account">
         <div class="py-container">
@@ -163,8 +163,8 @@ $(function(){
                     <div class="person-info">
                         <div class="person-photo"><img src="img/_/photo.png" alt=""></div>
                         <div class="person-account">
-                            <span class="name">Michelle</span>
-                            <span class="safe">账户安全</span>
+							<span class="name">{{loginName}}</span>
+							<span class="safe"><a href="logout/cas">退出登录 </a></span>
                         </div>
                         <div class="clearfix"></div>
                     </div>
@@ -211,28 +211,21 @@ $(function(){
                                         <th>操作</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody ng-repeat="address in addressList">
                                     <tr>
-                                        <td>刘田田</td>
-                                        <td>北京 北京市 海淀区 上地街道东北旺西路8号中关村软件园9号楼</td>
-                                        <td>1774***********4</td>
+                                        <td>{{address.contact}}</td>
+                                        <td>{{address.address}}</td>
+                                        <td>{{address.mobile}}</td>
                                         <td>
-                                            <a href="#">编辑</a>
-                                            <a href="#">删除</a>
-                                            默认地址
+											<div>
+												<a href="#" ng-click="updateAddress(address)" data-toggle="modal" data-target=".edit" data-keyboard="false"   class="sui-btn  btn-info add-new">编辑</a>
+												<a href="#" ng-click="deleteAddress(address)">删除</a>
+												<span class="base" ng-if="address.isDefault=='1'">默认地址</span>
+												<a href="javascript:;"  ng-click="setDefaultAddress(address.id)" ng-if="address.isDefault=='0'"><span >设为默认</span></a>
+											</div>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>沈沉</td>
-                                        <td>北京 北京市 海淀区 上地街道东北旺西路8号中关村软件园9号楼</td>
-                                        <td>1774***********4</td>
-                                        <td>
-                                            <a href="#">编辑</a>
-                                            <a href="#">删除</a>
-                                            <a href="#">设为默认</a>
-                                        </td>
-                                    </tr>
-                                    
+
                                 </tbody>
                             </table>                          
                         </div>
@@ -249,7 +242,7 @@ $(function(){
                                             <div class="control-group">
                                             <label class="control-label">收货人：</label>
                                             <div class="controls">
-                                                <input type="text" class="input-medium">
+                                                <input ng-model="address1.contact" type="text" class="input-medium">
                                             </div>
                                         </div>
                                         <div class="control-group">
@@ -257,13 +250,13 @@ $(function(){
                                             <div class="controls">
                                                 <div data-toggle="distpicker">
 													<div class="form-group area">
-														<select  class="form-control" ng-model="entity.address.provinceid" ng-options="provinces.provinceid as provinces.province for provinces in provincesList"></select>
+														<select  class="form-control" ng-model="address1.provinceid" ng-options="provinces.provinceid as provinces.province for provinces in provincesList"></select>
 													</div>
 													<div class="form-group area">
-														<select  class="form-control" ng-model="entity.address.cityid" ng-options="cities.cityid as cities.city for cities in citiesList"></select>
+														<select  class="form-control" ng-model="address1.cityid" ng-options="cities.cityid as cities.city for cities in citiesList"></select>
 													</div>
 													<div class="form-group area">
-														<select  class="form-control" ng-model="entity.address.townid" ng-options="areas.areaid as areas.area for areas in areasList"></select>
+														<select  class="form-control" ng-model="address1.townid" ng-options="areas.areaid as areas.area for areas in areasList"></select>
 													</div>
 												</div>
                                             </div>									 
@@ -271,25 +264,25 @@ $(function(){
                                         <div class="control-group">
                                             <label class="control-label">详细地址：</label>
                                             <div class="controls">
-                                                <input type="text" class="input-large">
+                                                <input ng-model="address1.address" type="text" class="input-large">
                                             </div>
                                         </div>
                                         <div class="control-group">
                                             <label class="control-label">联系电话：</label>
                                             <div class="controls">
-                                                <input type="text" class="input-medium">
+                                                <input ng-model="address1.mobile" type="text" class="input-medium">
                                             </div>
                                         </div>
                                         <div class="control-group">
                                             <label class="control-label">邮箱：</label>
                                             <div class="controls">
-                                                <input type="text" class="input-medium">
+                                                <input ng-model="address1.notes" type="text" class="input-medium">
                                             </div>
                                         </div>
                                         <div class="control-group">
                                             <label class="control-label">地址别名：</label>
                                             <div class="controls">
-                                                <input type="text" class="input-medium">
+                                                <input  ng-model="address1.alias" type="text" class="input-medium">
                                             </div>
                                             <div class="othername">
                                                 建议填写常用地址：<a href="#" class="sui-btn btn-default">家里</a>　<a href="#" class="sui-btn btn-default">父母家</a>　<a href="#" class="sui-btn btn-default">公司</a>
@@ -301,7 +294,7 @@ $(function(){
                                         
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" data-ok="modal" class="sui-btn btn-primary btn-large">确定</button>
+                                        <button ng-click="save()" type="button" data-ok="modal" class="sui-btn btn-primary btn-large">确定</button>
                                         <button type="button" data-dismiss="modal" class="sui-btn btn-default btn-large">取消</button>
                                     </div>
                                 </div>
@@ -448,5 +441,5 @@ $(function(){
 <!--页面底部END-->
 
 
-
+</body>
 </html>
