@@ -1,6 +1,7 @@
 package cn.itcast.core.pojo.good;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Brand implements Serializable {
     private Long id;
@@ -14,6 +15,16 @@ public class Brand implements Serializable {
      * 品牌首字母
      */
     private String firstChar;
+
+    private String status;
+
+    public String getStatus () {
+        return status;
+    }
+
+    public void setStatus (String status) {
+        this.status = status;
+    }
 
     private static final long serialVersionUID = 1L;
 
@@ -55,7 +66,8 @@ public class Brand implements Serializable {
         return sb.toString();
     }
 
-    @Override
+
+     @Override
     public boolean equals(Object that) {
         if (this == that) {
             return true;
@@ -81,4 +93,6 @@ public class Brand implements Serializable {
         result = prime * result + ((getFirstChar() == null) ? 0 : getFirstChar().hashCode());
         return result;
     }
+
+
 }

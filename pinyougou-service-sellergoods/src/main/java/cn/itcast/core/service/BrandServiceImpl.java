@@ -9,7 +9,13 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import entity.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Session;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +23,7 @@ import java.util.Map;
 /**
  * 品牌管理
  */
+@SuppressWarnings("all")
 @Service
 public class BrandServiceImpl implements BrandService {
 
@@ -47,6 +54,7 @@ public class BrandServiceImpl implements BrandService {
     //保存
     @Override
     public void add(Brand brand) {
+
         brandDao.insertSelective(brand);
         //insert into tb_tt (id,name,98个) values (3,haha,null 98个)  执行的效果是一样的 但是执行的效率是一样的
         //insert into tb_tt (id,name) values (3,haha)
@@ -113,5 +121,7 @@ public class BrandServiceImpl implements BrandService {
     public List<Map> selectOptionList() {
         return brandDao.selectOptionList();
     }
+
+
 
 }

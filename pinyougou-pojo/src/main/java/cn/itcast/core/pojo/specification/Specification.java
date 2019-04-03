@@ -13,6 +13,8 @@ public class Specification implements Serializable {
      */
     private String specName;
 
+
+
     private static final long serialVersionUID = 1L;
 
     public Long getId() {
