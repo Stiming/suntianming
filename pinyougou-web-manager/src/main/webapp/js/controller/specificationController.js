@@ -86,5 +86,16 @@ app.controller('specificationController' ,function($scope,$controller   ,specifi
 	$scope.deleteTableRow = function(index){
 		$scope.entity.specificationOptionList.splice(index,1);
 	}
+
+    $scope.execle=function () {
+        alert("232424")
+        specificationService.execle().success(function(response){
+            if(response.flag){
+                alert(response.message);
+            }else{
+                alert(response.message);
+            }
+        })
+    }
     
 });	

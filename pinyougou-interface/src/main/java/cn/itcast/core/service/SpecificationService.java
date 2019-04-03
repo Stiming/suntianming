@@ -1,5 +1,6 @@
 package cn.itcast.core.service;
 
+import cn.itcast.core.pojo.good.Brand;
 import cn.itcast.core.pojo.specification.Specification;
 import entity.PageResult;
 import vo.SpecificationVo;
@@ -17,4 +18,8 @@ public interface SpecificationService {
     void update(SpecificationVo vo);
 
     List<Map> selectOptionList();
+
+    List<Specification> seleExecle();
+
+    void insertExcel(String s);
 }

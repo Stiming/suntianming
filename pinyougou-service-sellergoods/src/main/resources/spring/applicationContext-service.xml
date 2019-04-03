@@ -8,7 +8,7 @@
         http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-
+<!--<context:property-placeholder  location="classpath:properties/application.properties"></context:property-placeholder>-->
 	<!-- Dubbo启名称 -->
 	<dubbo:application name="pinyougou-sellergoods-service"/>
 	<!-- 连接 注册中心 -->

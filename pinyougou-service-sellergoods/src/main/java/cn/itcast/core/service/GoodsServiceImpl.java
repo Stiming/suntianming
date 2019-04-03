@@ -294,4 +294,10 @@ public class GoodsServiceImpl implements GoodsService {
 
         }
     }
+
+    @Override
+    public List<Goods> seleExecle() {
+       return  goodsDao.selectByExample(null);
+
+    }
 }

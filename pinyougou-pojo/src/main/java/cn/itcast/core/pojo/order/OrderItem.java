@@ -153,16 +153,29 @@ public class OrderItem implements Serializable {
     }
 
     @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        OrderItem orderItem = (OrderItem) o;
+//        return Objects.equals(itemId, orderItem.itemId);
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//
+//        return Objects.hash(itemId);
+//    }
+
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrderItem orderItem = (OrderItem) o;
-        return Objects.equals(itemId, orderItem.itemId);
+        return Objects.equals(orderId, orderItem.orderId);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(itemId);
+        return Objects.hash(orderId);
     }
 }

@@ -2,6 +2,7 @@ package cn.itcast.core.service;
 
 import cn.itcast.core.dao.specification.SpecificationOptionDao;
 import cn.itcast.core.dao.template.TypeTemplateDao;
+import cn.itcast.core.pojo.good.Brand;
 import cn.itcast.core.pojo.specification.SpecificationOption;
 import cn.itcast.core.pojo.specification.SpecificationOptionQuery;
 import cn.itcast.core.pojo.template.TypeTemplate;
@@ -11,16 +12,24 @@ import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import entity.PageResult;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 /**
  * 模板管理
  */
+@SuppressWarnings("all")
 @Service
 @Transactional
 public class TypeTemplateServiceImpl implements TypeTemplateService {
@@ -92,5 +101,54 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
         }
 
         return listMap;
+    }
+
+    @Override
+    public List<TypeTemplate> seleExecle() {
+        return typeTemplateDao.selectByExample(null);
+
+    }
+
+    @Override
+    public void insertExcel(String s) {
+        System.out.println(123);
+        HSSFWorkbook wb = null;
+        try {
+            wb = new HSSFWorkbook(new FileInputStream(s));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        HSSFSheet sheetAt = wb.getSheetAt(0);
+
+
+        int i=0;
+        for (Row cells : sheetAt) {
+            if (i > 1) {
+                Cell cell = cells.getCell(0);
+                cell.setCellType(CellType.STRING);
+                String id = cell.getStringCellValue();
+                String name = cells.getCell(1).getStringCellValue();
+                String spec_ids = cells.getCell(2).getStringCellValue();
+                String brand_ids = cells.getCell(3).getStringCellValue();
+                String custom_attribute_items = cells.getCell(4).getStringCellValue();
+
+                Cell cell1 = cells.getCell(5);
+                cell1.setCellType(CellType.STRING);
+                String status = cell1.getStringCellValue();
+//            String  address=cells.getCell(2).getStringCellValue();
+//            String  phone=cells.getCell(3).getStringCellValue();
+//            String  emali=cells.getCell(4).getStringCellValue();
+                TypeTemplate typeTemplate = new TypeTemplate();
+               typeTemplate.setId(Long.parseLong(id));
+               typeTemplate.setBrandIds(brand_ids);
+               typeTemplate.setSpecIds(spec_ids);
+               typeTemplate.setCustomAttributeItems(custom_attribute_items);
+               typeTemplate.setStatus(Long.parseLong(status));
+               typeTemplate.setName(name);
+                typeTemplateDao.insertSelective(typeTemplate);
+            }
+            i++;
+
+        }
     }
 }

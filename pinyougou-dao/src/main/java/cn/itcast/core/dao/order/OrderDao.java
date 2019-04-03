@@ -3,9 +3,12 @@ package cn.itcast.core.dao.order;
 import cn.itcast.core.pojo.order.Order;
 import cn.itcast.core.pojo.order.OrderQuery;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface OrderDao {
+       List<Map>selectordertj();
     int countByExample(OrderQuery example);
 
     int deleteByExample(OrderQuery example);

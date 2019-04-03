@@ -2,6 +2,7 @@ package cn.itcast.core.service;
 
 import cn.itcast.core.dao.specification.SpecificationDao;
 import cn.itcast.core.dao.specification.SpecificationOptionDao;
+import cn.itcast.core.pojo.good.Brand;
 import cn.itcast.core.pojo.specification.Specification;
 import cn.itcast.core.pojo.specification.SpecificationOption;
 import cn.itcast.core.pojo.specification.SpecificationOptionQuery;
@@ -9,16 +10,24 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import entity.PageResult;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import vo.SpecificationVo;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 /**
  * 规格管理
  */
+@SuppressWarnings("all")
 @Service
 @Transactional
 public class SpecificationServiceImpl implements SpecificationService {
@@ -92,5 +101,49 @@ public class SpecificationServiceImpl implements SpecificationService {
     @Override
     public List<Map> selectOptionList() {
         return specificationDao.selectOptionList();
+    }
+
+    @Override
+    public List<Specification> seleExecle() {
+        List<Specification> specifications = specificationDao.selectByExample(null);
+        return specifications;
+    }
+
+    @Override
+    public void insertExcel(String s) {
+        HSSFWorkbook wb = null;
+        try {
+            wb = new HSSFWorkbook(new FileInputStream(s));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        HSSFSheet sheetAt = wb.getSheetAt(0);
+
+
+        int i=0;
+        for (Row cells : sheetAt) {
+            if (i > 1) {
+                Cell cell = cells.getCell(0);
+                cell.setCellType(CellType.STRING);
+                String id = cell.getStringCellValue();
+                String spec_name = cells.getCell(1).getStringCellValue();
+                Cell cell1 = cells.getCell(2);
+                cell1.setCellType(CellType.STRING);
+                String status = cell1.getStringCellValue();
+
+//            String  address=cells.getCell(2).getStringCellValue();
+//            String  phone=cells.getCell(3).getStringCellValue();
+//            String  emali=cells.getCell(4).getStringCellValue();
+                Specification specification = new Specification();
+
+                specification.setId(Long.parseLong(id));
+                specification.setSpecName(spec_name);
+                specification.setStatus(Long.parseLong(status));
+
+                specificationDao.insertSelective(specification);
+            }
+            i++;
+
+        }
     }
 }

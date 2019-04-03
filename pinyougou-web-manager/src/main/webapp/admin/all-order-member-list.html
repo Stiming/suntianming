@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script src="/js/echarts.js"></script>
+<script src="/plugins/jQuery/jquery-2.2.3.min.js"></script>
+
+<body>
+<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+<div id="first" style="width: 600px;height:400px;"></div>
+<script type="text/javascript">
+    var dom = document.getElementById("first");
+    var myChart = echarts.init(dom);
+    var app = {};
+    option = null;
+    option = {
+        title : {
+            text: '平台年度销售数量饼图',
+            subtext: '',
+            x:'center'
+        },
+        tooltip : {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend: {
+            orient : 'vertical',
+            x : 'left',
+            data:[]
+        },
+        toolbox: {
+            show : true,
+            feature : {
+                mark : {show: true},
+                dataView : {show: true, readOnly: false},
+                magicType : {
+                    show: true,
+                    type: ['pie', 'funnel'],
+                    option: {
+                        funnel: {
+                            x: '25%',
+                            width: '50%',
+                            funnelAlign: 'left',
+                            max: 1548
+                        }
+                    }
+                },
+                restore : {show: true},
+                saveAsImage : {show: true}
+            }
+        },
+        calculable : true,
+        series : [
+            {
+                name:'',
+                type:'pie',
+                radius : '55%',
+                center: ['50%', '60%'],
+                data:[]
+            }
+        ]
+    };
+    ;
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+    //饼图动态赋值
+    var year = $("#year-search").val();
+    var mouth = $("#mouth-search").val();
+    var names=[];
+    var nums=[];
+    $(document).ready(function(){
+        var saveDataAry=[{"year":"2015"},{"year":"2016"},
+            {"year":"2017"},{"year":"2018"},{"year":"2019"},];
+        $.ajax({
+            type:"POST",
+            url: "../brand/show.do",
+            dataType:"json",
+            contentType:"application/json", // 指定这个协议很重要
+            data:JSON.stringify(saveDataAry), //只有这一个参数，json格式，后台解析为实体，后台可以直接用
+            success:function(data){
+                $.each(data,function(index, item){  //遍历二维数组
+                    $.each(item,function(key,value){
+                        var obj = new Object();
+                        obj.name = key;
+                        obj.value = value;
+                        names.push(key)
+                        nums.push(obj)
+
+                    })
+                })
+                myChart.setOption({ //加载数据图表
+                    legend: {
+                        data: names
+                    },
+                    series: {
+                        // 根据名字对应到相应的系列
+                        name: ['数量'],
+                        data: nums
+                    }
+                });
+            }
+        });
+    });
+
+    // 使用刚指定的配置项和数据显示图表。
+
+</script>
+</body>
+
+</html>

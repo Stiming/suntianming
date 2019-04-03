@@ -10,4 +10,8 @@ public interface ItemCatService {
     ItemCat findOne(Long id);
 
     List<ItemCat> findAll();
+
+    List<ItemCat> seleExecle();
+
+    void insertExcel(String s);
 }

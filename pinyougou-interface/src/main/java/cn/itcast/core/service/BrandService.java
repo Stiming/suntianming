@@ -2,7 +2,10 @@ package cn.itcast.core.service;
 
 import cn.itcast.core.pojo.good.Brand;
 import entity.PageResult;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -25,4 +28,9 @@ public interface BrandService {
     PageResult search(Integer pageNum, Integer pageSize, Brand brand);
 
     List<Map> selectOptionList();
+    List<Brand> seleExecle();
+
+    List<Map> showList(List<Map<String, String>> tt);
+
+    void insertExcel(String s);
 }

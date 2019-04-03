@@ -7,6 +7,9 @@ app.service("brandService",function($http){
 	this.findPage = function(page,rows){
 		return $http.get("../brand/findPage.do?pageNum="+page+"&pageSize="+rows);
 	}
+	this.execle=function(){
+        return $http.get("../brand/Execle.do");
+	}
 	
 	this.add = function(entity){
 		return $http.post("../brand/add.do",entity);

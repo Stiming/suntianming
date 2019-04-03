@@ -7,6 +7,19 @@ public class ItemCat implements Serializable {
      * 类目ID
      */
     private Long id;
+      private Long status;
+
+    public Long getStatus() {
+        return status;
+    }
+
+    public void setStatus(Long status) {
+        this.status = status;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
 
     /**
      * 父类目ID=0时，代表的是一级的类目

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script src="/js/echarts.js"></script>
+<script src="/plugins/jQuery/jquery-2.2.3.min.js"></script>
+
+<body>
+<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+<div id="main" style="width: 1000px;height:500px;"></div>
+<script type="text/javascript">
+    var myChart = echarts.init(document.getElementById('main'));
+    myChart.setOption({
+        grid:{//直角坐标系内绘图网格
+            show:true,//是否显示直角坐标系网格。[ default: false ]
+            // left:"20%",//grid 组件离容器左侧的距离。
+            // right:"10px",
+            borderColor:"#abc48d",//网格的边框颜色
+            bottom:"20%",//
+            // x:800,
+            // y:100,
+            // x2:800,
+            // y2:800,
+            borderWidth:100,
+
+        },
+        title: {
+            text: '平台年度销售商品的数量折线图',
+                      sublink: 'http://www.thinkgis.cn/public/sina',
+
+                        textStyle: {
+                           color: 'blue'
+                     }
+        },
+        tooltip: {},
+        legend: {
+            data:['销量']
+        },
+        xAxis: {
+            data: []
+        },
+        yAxis: {},
+        series: [{
+            name: '销量',
+            type: 'line',
+            data: []
+        }]
+    });
+    myChart.showLoading();
+    var names=[];
+    var nums=[];
+    $(document).ready(function(){
+        var saveDataAry=[{"year":"2015"},{"year":"2016"},
+            {"year":"2017"},{"year":"2018"},{"year":"2019"},];
+        $.ajax({
+            type:"POST",
+            url: "../brand/show.do",
+            dataType:"json",
+            contentType:"application/json", // 指定这个协议很重要
+            data:JSON.stringify(saveDataAry), //只有这一个参数，json格式，后台解析为实体，后台可以直接用
+            success:function(data){
+                $.each(data,function(index, item){  //遍历二维数组
+                    $.each(item,function(key,value){
+
+                        names.push(key)
+                        nums.push(value)
+
+                    })
+                })
+                myChart.hideLoading();    //隐藏加载动画
+                myChart.setOption({        //加载数据图表
+                    xAxis: {
+                        name: "年份",
+                        data: names,
+
+
+                    },
+                    series: [{
+                        // 根据名字对应到相应的系列
+                        name: '销量',
+                        data: nums,
+                        nameLocation:'left',
+                        label: {
+                        normal: {
+                            show: true,
+                           position: 'top'
+                     }
+                  },
+                   areaStyle: {
+                               normal: {
+                            color:"red", //区域填充颜色
+                                   opacity:0.5
+                                      }
+               },
+                    itemStyle:{
+                           normal: {
+                                 color:"blue" //拐点颜色
+                                  }
+                                },
+
+                           lineStyle:{
+                                       normal:{
+                                color:"#red", //线条颜色
+                               opacity:0.5
+                               }
+                               }
+                    }]
+                });
+
+            }
+        });
+    });
+
+    // 使用刚指定的配置项和数据显示图表。
+
+</script>
+</body>
+
+</html>

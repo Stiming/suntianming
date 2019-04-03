@@ -79,5 +79,15 @@ app.controller("brandController",function($scope,$controller,$http,brandService)
 			$scope.list = response.rows;
 		});
 	}
+	$scope.execle=function () {
+		alert("232424")
+		brandService.execle().success(function(response){
+			if(response.flag){
+				alert(response.message);
+			}else{
+				alert(response.message);
+			}
+		})
+    }
 	
 });

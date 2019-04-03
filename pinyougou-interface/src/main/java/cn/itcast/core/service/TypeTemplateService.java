@@ -16,4 +16,8 @@ public interface TypeTemplateService {
     void update(TypeTemplate typeTemplate);
 
     List<Map> findBySpecList(Long id);
+
+    List<TypeTemplate> seleExecle();
+
+    void insertExcel(String s);
 }

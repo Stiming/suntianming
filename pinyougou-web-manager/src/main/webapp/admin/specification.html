@@ -2,7 +2,6 @@
 <html>
 
 <head>
-    <!-- 页面meta -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>规格管理</title>
@@ -42,8 +41,12 @@
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-default" title="新建" ng-click="entity={specificationOptionList:[]}" data-toggle="modal" data-target="#editModal" ><i class="fa fa-file-o"></i> 新建</button>
                                         <button type="button" class="btn btn-default" title="删除" ng-click="dele()" ><i class="fa fa-trash-o"></i> 删除</button>
-                                        
                                         <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i class="fa fa-refresh"></i> 刷新</button>
+										<button type="button" class="btn btn-default" title="刷新" ng-click="execle()"><i class="fa fa-refresh"></i> 导出到Execle</button>
+										<form action="../specification/pic1.do" method="post" enctype="multipart/form-data">
+											<input type="file" name="uploadFile">
+											<input type="submit" value="execle导入">
+										</form>
                                     </div>
                                 </div>
                             </div>

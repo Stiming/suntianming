@@ -7,6 +7,19 @@ public class Specification implements Serializable {
      * 主键
      */
     private Long id;
+    private Long status;
+
+    public Long getStatus() {
+        return status;
+    }
+
+    public void setStatus(Long status) {
+        this.status = status;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
 
     /**
      * 名称

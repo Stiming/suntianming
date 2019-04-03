@@ -1,29 +1,46 @@
 package cn.itcast.core.service;
 
 import cn.itcast.core.dao.good.BrandDao;
+import cn.itcast.core.dao.order.OrderDao;
 import cn.itcast.core.pojo.good.Brand;
 import cn.itcast.core.pojo.good.BrandQuery;
+import cn.itcast.core.pojo.order.Order;
+import cn.itcast.core.pojo.order.OrderQuery;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import entity.PageResult;
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.context.ServletContextAware;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+import javax.sound.midi.Soundbank;
+import java.io.*;
+import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * 品牌管理
  */
 @Service
-public class BrandServiceImpl implements BrandService {
+public class BrandServiceImpl implements BrandService{
 
 
 
     @Autowired
     private BrandDao brandDao;
+    @Autowired
+    OrderDao orderDao;
 
     @Override
     public List<Brand> findAll() {
@@ -107,11 +124,91 @@ public class BrandServiceImpl implements BrandService {
         //结果集 select * from tb_brand  limit 开始行,每页数
         return new PageResult(page.getTotal(), page.getResult());
     }
-
+//      @Value("${execurl}")
+//      private String execurl;
     //查询所有品牌 并返回
     @Override
     public List<Map> selectOptionList() {
         return brandDao.selectOptionList();
     }
+
+    @Override
+
+    public List<Brand> seleExecle() {
+        List<Brand> brands = brandDao.selectByExample(null);
+          return brands;
+
+
+        }
+
+    @Override
+    public List<Map> showList(List<Map<String, String>> tt) {
+        HashMap<String, Integer> map1 = new HashMap<>();
+
+        OrderQuery orderQuery = new OrderQuery();
+        orderQuery.createCriteria().andStatusEqualTo("2");
+        List<Order> orders = orderDao.selectByExample(orderQuery);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        for (Map<String, String> map : tt) {
+            int number=1;
+            for (Order order : orders) {
+                Date createTime = order.getCreateTime();
+                String format = simpleDateFormat.format(createTime);
+                String substring = format.substring(0, 4);
+               if (substring.equals(map.get("year"))){
+                   map1.put(map.get("year"),number);
+                   number++;
+               }
+            }
+        }
+//        for (String s : map1.keySet()) {
+//            System.out.println(s);
+//            System.out.println(map1.get(s));
+//        }
+        ArrayList<Map> list = new ArrayList<>();
+        list.add(map1);
+        return list;
+    }
+
+    @Override
+    public void insertExcel(String s) {
+        System.out.println(123);
+        HSSFWorkbook wb = null;
+        try {
+            wb = new HSSFWorkbook(new FileInputStream(s));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        HSSFSheet sheetAt = wb.getSheetAt(0);
+
+
+        int i=0;
+        for (Row cells : sheetAt) {
+            if (i > 1) {
+                Cell cell = cells.getCell(0);
+                cell.setCellType(CellType.STRING);
+                String id = cell.getStringCellValue();
+                String name = cells.getCell(1).getStringCellValue();
+                String firstChar = cells.getCell(2).getStringCellValue();
+                Cell cell1 = cells.getCell(3);
+                cell1.setCellType(CellType.STRING);
+                String status = cell1.getStringCellValue();
+//            String  address=cells.getCell(2).getStringCellValue();
+//            String  phone=cells.getCell(3).getStringCellValue();
+//            String  emali=cells.getCell(4).getStringCellValue();
+                Brand brand = new Brand();
+                brand.setId(Long.parseLong(id));
+                brand.setName(name);
+                brand.setFirstChar(firstChar);
+                brand.setStatus(Long.parseLong(status));
+                System.out.println(brand);
+                 brandDao.insertSelective(brand);
+            }
+            i++;
+
+        }
+
+    }
+
 
 }

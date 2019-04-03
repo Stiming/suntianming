@@ -530,4 +530,7 @@
       seller_id = #{sellerId,jdbcType=VARCHAR}
     where order_id = #{orderId,jdbcType=BIGINT}
   </update>
+  <select id="selectordertj" resultType="java.util.Map">
+    SELECT COUNT(*) NUMBER,seller_id  FROM tb_order_item GROUP BY seller_id
+  </select>
 </mapper>

@@ -102,4 +102,14 @@ app.controller('goodsController' ,function($scope,$controller,itemCatService   ,
 			}
 		});
 	}
+    $scope.execle=function () {
+        alert("232424")
+        goodsService.execle().success(function(response){
+            if(response.flag){
+                alert(response.message);
+            }else{
+                alert(response.message);
+            }
+        })
+    }
 });	

@@ -108,4 +108,14 @@ app.controller('typeTemplateController' ,function($scope,$controller,brandServic
 	$scope.deleteTableRow = function(index){
 		$scope.entity.customAttributeItems.splice(index,1);
 	}
+    $scope.execle=function () {
+        alert("232424")
+        typeTemplateService.execle().success(function(response){
+            if(response.flag){
+                alert(response.message);
+            }else{
+                alert(response.message);
+            }
+        })
+    }
 });	
