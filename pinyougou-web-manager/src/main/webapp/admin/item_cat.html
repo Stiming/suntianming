@@ -54,7 +54,9 @@
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-default" title="新建" data-toggle="modal" data-target="#editModal" ><i class="fa fa-file-o"></i> 新建</button>
                                         <button type="button" class="btn btn-default" title="删除" ><i class="fa fa-trash-o"></i> 删除</button>
+										<button type="button" class="btn btn-default" title="审核通过" ng-click="updateStatus(2)"><i class="fa fa-trash-o"></i> 审核通过</button>
                                         <button type="button" class="btn btn-default" title="刷新" ><i class="fa fa-check"></i> 刷新</button>
+										<button type="button" class="btn btn-default" title="驳回" ng-click="updateStatus(3)"><i class="fa fa-trash-o"></i> 驳回</button>
                                        
                                     </div>
                                 </div>
@@ -71,7 +73,9 @@
 										  <th class="sorting_asc">分类ID</th>
 									      <th class="sorting">分类名称</th>									   
 									      <th class="sorting">类型模板ID</th>
-									     						
+									      <th class="sorting">状态值</th>
+									      <th class="sorting">状态</th>
+
 					                      <th class="text-center">操作</th>
 			                          </tr>
 			                      </thead>
@@ -79,11 +83,17 @@
 			                          <tr ng-repeat="entity in list">
 			                              <td><input  type="checkbox" ></td>			                              
 				                          <td>{{entity.id}}</td>
-									      <td>{{entity.name}}</td>									    
+									      <td>{{entity.name}}</td>
 									      <td>
 									      	{{entity.typeId}}  
-									      </td>									      
-		                                  <td class="text-center">		      
+									      </td>
+										  <td>{{entity.status}}</td>
+										  <td>
+										  		<span>
+													{{status[entity.status]}}
+												</span>
+										  </td>
+		                                  <td class="text-center">
 			                                  <span ng-if="grade != 3">                          
 			                                      <button type="button" ng-click="setGrade(grade+1);selectList(entity);" class="btn bg-olive btn-xs" >查询下级</button> 		                                     
 			                                  </span>     

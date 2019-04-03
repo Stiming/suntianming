@@ -33,4 +33,8 @@ app.service('itemCatService',function($http){
 	this.findByParentId = function(parentId){
 		return $http.get("../itemCat/findByParentId.do?parentId="+parentId);
 	}
+
+    this.updateStatus = function(id,ids){
+        return $http.get("../itemCat/updateStatus.do?id="+id+"&ids="+ids);//id: 状态
+    }
 });

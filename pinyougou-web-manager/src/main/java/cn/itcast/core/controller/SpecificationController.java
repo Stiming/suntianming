@@ -17,6 +17,7 @@ import java.util.Map;
  * 规格管理
  *
  */
+@SuppressWarnings("all")
 @RestController
 @RequestMapping("/specification")
 public class SpecificationController {
@@ -61,5 +62,25 @@ public class SpecificationController {
     @RequestMapping("/selectOptionList")
     public List<Map> selectOptionList(){
         return specificationService.selectOptionList();
+    }
+
+
+
+
+    /**
+     * 规格审核
+     * @param id
+     * @param ids
+     * @return
+     */
+    @RequestMapping("/updateStatus")
+    public Result updateStatus(Long id, Long[] ids){
+        try {
+            specificationService.updateStatus(id,ids);
+            return new Result(true,"操作成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,"操作失败");
+        }
     }
 }

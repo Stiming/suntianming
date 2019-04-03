@@ -33,7 +33,7 @@ public class ItemCatServiceImpl implements ItemCatService {
         //正常商品分类列表查询
         ItemCatQuery itemCatQuery = new ItemCatQuery();
         itemCatQuery.createCriteria().andParentIdEqualTo(parentId);
-        return itemCatDao.selectByExample(itemCatQuery);
+        return itemCatDao.selectByStatus(itemCatQuery);
     }
 
 
@@ -46,5 +46,26 @@ public class ItemCatServiceImpl implements ItemCatService {
     @Override
     public List<ItemCat> findAll() {
         return itemCatDao.selectByExample(null);
+    }
+
+    /**
+     * 分类审核
+     * @param id
+     * @param ids
+     */
+    @Override
+    public void updateStatus(Long id, Long[] ids) {
+        //创建分类对象
+        ItemCat itemCat = new ItemCat();
+        //设置状态
+        itemCat.setStatus(id);
+        //遍历id
+        for (Long aLong : ids) {
+            //设置id
+            itemCat.setId(aLong);
+            //更改设置
+            itemCatDao.updateByPrimaryKeySelective(itemCat);
+        }
+
     }
 }

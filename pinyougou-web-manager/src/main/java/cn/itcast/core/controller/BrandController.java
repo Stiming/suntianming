@@ -19,6 +19,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/brand")
+@SuppressWarnings("all")
 public class BrandController {
 
     @Reference
@@ -41,6 +42,7 @@ public class BrandController {
         return brandService.findPage(pageNum,pageSize);
     }
     //查询分页对象 入参： 当前页 每页数 条件对象 ?id=2
+    //查询审核中分类
     @RequestMapping("/search")
     //public PageResult search(Integer pageNum, Integer pageSize,@RequestBody(required = false) Brand brand){
     public PageResult search(Integer pageNum, Integer pageSize,@RequestBody Brand brand){
@@ -97,5 +99,21 @@ public class BrandController {
     @RequestMapping("/selectOptionList")
     public List<Map> selectOptionList(){
         return brandService.selectOptionList();
+    }
+
+    /**
+     * 分类审核
+     * @param id
+     * @return
+     */
+    @RequestMapping("/updateStatus")
+    public Result updateStatus(Long id,Long[] ids){
+        try {
+            brandService.updateStatus(id,ids);
+            return new Result(true,"操作成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,"操作失败");
+        }
     }
 }

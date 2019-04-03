@@ -27,4 +27,8 @@ public interface TypeTemplateDao {
     int updateByPrimaryKeySelective(TypeTemplate record);
 
     int updateByPrimaryKey(TypeTemplate record);
+
+
+
+    List<TypeTemplate> selectByStatus(TypeTemplateQuery example);
 }

@@ -27,4 +27,7 @@ public interface ItemCatDao {
     int updateByPrimaryKeySelective(ItemCat record);
 
     int updateByPrimaryKey(ItemCat record);
+
+    //查询未审核之外的分类
+    List<ItemCat> selectByStatus(ItemCatQuery example);
 }

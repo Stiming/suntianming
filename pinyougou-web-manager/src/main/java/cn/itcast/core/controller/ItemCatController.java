@@ -3,6 +3,7 @@ package cn.itcast.core.controller;
 import cn.itcast.core.pojo.item.ItemCat;
 import cn.itcast.core.service.ItemCatService;
 import com.alibaba.dubbo.config.annotation.Reference;
+import entity.Result;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,6 +12,7 @@ import java.util.List;
 /**
  * 商品分类管理
  */
+@SuppressWarnings("all")
 @RestController
 @RequestMapping("/itemCat")
 public class ItemCatController {
@@ -32,5 +34,22 @@ public class ItemCatController {
     @RequestMapping("/findAll")
     public List<ItemCat> findAll(){
         return itemCatService.findAll();
+    }
+
+    /***
+     * 分类审核
+     * @param id
+     * @param ids
+     * @return
+     */
+    @RequestMapping("/updateStatus")
+    public Result updateStatus(Long id, Long[] ids){
+        try {
+            itemCatService.updateStatus(id,ids);
+            return new Result(true,"操作成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,"操作失败");
+        }
     }
 }

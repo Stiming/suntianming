@@ -107,12 +107,30 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 		
 		$scope.findByParentId(p_entity.id);
 	}
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+    // 显示状态
+    $scope.status = ["未审核","审核中","审核通过","已驳回"];
+
+
+    // 分类审核
+    $scope.updateStatus = function(id){
+        brandService.updateStatus(id,$scope.selectIds).success(function(response){
+            if(response.flag){
+                // 操作成功
+                alert(response.message);
+                $scope.reloadList();
+                $scope.selectIds = [];
+            }else{
+                // 操作失败
+                alert(response.message);
+            }
+
+        });
+    }
 	
 	
 	

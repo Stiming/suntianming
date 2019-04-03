@@ -67,7 +67,7 @@
   </sql>
   <sql id="Base_Column_List" >
     <if test="fields == null" >
-      id, parent_id, name, type_id
+      id, parent_id, name, type_id, status
     </if>
     <if test="fields != null" >
       ${fields}
@@ -188,6 +188,9 @@
       <if test="typeId != null" >
         type_id = #{typeId,jdbcType=BIGINT},
       </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=BIGINT},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -198,4 +201,23 @@
       type_id = #{typeId,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+
+
+  <select id="selectByStatus" resultMap="BaseResultMap" parameterType="cn.itcast.core.pojo.item.ItemCatQuery" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_item_cat
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    AND status != 0
+  </select>
+
 </mapper>

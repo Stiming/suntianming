@@ -31,4 +31,8 @@ app.service("brandService",function($http){
 	this.selectOptionList = function(){
 		return $http.get("../brand/selectOptionList.do");//url 入参：无  返回值：List<Map>
 	}
+
+    this.updateStatus = function(id,ids){
+        return $http.get("../brand/updateStatus.do?id="+id+"&ids="+ids);//id: 状态
+    }
 });

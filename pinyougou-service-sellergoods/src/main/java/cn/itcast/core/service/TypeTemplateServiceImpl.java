@@ -45,11 +45,20 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
             //通过模板ID 查询  List<Map>  规格结果集
             List<Map> specList = findBySpecList(template.getId());
             redisTemplate.boundHashOps("specList").put(template.getId(),specList);
-
         }
+
+
+        //分页查询
         PageHelper.startPage(page,rows);
-        Page<TypeTemplate> p = (Page<TypeTemplate>) typeTemplateDao.selectByExample(null);
-        return new PageResult(p.getTotal(),p.getResult());
+        TypeTemplateQuery typeTemplateQuery = new TypeTemplateQuery();
+        TypeTemplateQuery.Criteria criteria = typeTemplateQuery.createCriteria();
+        if (typeTemplate.getName() != null && !"".equals(typeTemplate.getName())){
+            criteria.andNameLike("%"+typeTemplate.getName()+"%");
+        }
+        Page<TypeTemplate> p = (Page<TypeTemplate>) typeTemplateDao.selectByStatus(typeTemplateQuery);
+        PageResult pageResult = new PageResult(p.getTotal(), p.getResult());
+        return pageResult;
+
     }
 
     //添加
@@ -92,5 +101,22 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
         }
 
         return listMap;
+    }
+
+    @Override
+    public void updateStatus(Long id, Long[] ids) {
+        //创建模板对象
+        TypeTemplate typeTemplate = new TypeTemplate();
+        //设置模板状态
+        typeTemplate.setStatus(id);
+        //遍历ids
+        for (Long aLong : ids) {
+            //设置id
+            typeTemplate.setId(aLong);
+            //保存更改
+            typeTemplateDao.updateByPrimaryKeySelective(typeTemplate);
+        }
+
+
     }
 }

@@ -108,4 +108,23 @@ app.controller('typeTemplateController' ,function($scope,$controller,brandServic
 	$scope.deleteTableRow = function(index){
 		$scope.entity.customAttributeItems.splice(index,1);
 	}
+
+    // 显示状态
+    $scope.status = ["未审核","审核中","审核通过","已驳回"];
+
+	//模板审核
+    $scope.updateStatus = function(id){
+        typeTemplateService.updateStatus(id,$scope.selectIds).success(function(response){
+            if(response.flag){
+                // 操作成功
+                alert(response.message);
+                $scope.reloadList();
+                $scope.selectIds = [];
+            }else{
+                // 操作失败
+                alert(response.message);
+            }
+
+        });
+    }
 });	

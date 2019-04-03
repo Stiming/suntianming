@@ -82,7 +82,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     //条件的分页对象查询
-
+    //查询审核中分类
     @Override
     public PageResult search(Integer pageNum, Integer pageSize, Brand brand) {
 
@@ -101,8 +101,10 @@ public class BrandServiceImpl implements BrandService {
             criteria.andFirstCharEqualTo(brand.getFirstChar().trim());
         }
 
+
+
         //查询结果集
-        Page<Brand> page = (Page<Brand>) brandDao.selectByExample(brandQuery);
+        Page<Brand> page = (Page<Brand>) brandDao.selectByStatus(brandQuery);
         //总条数
         //结果集 select * from tb_brand  limit 开始行,每页数
         return new PageResult(page.getTotal(), page.getResult());
@@ -112,6 +114,24 @@ public class BrandServiceImpl implements BrandService {
     @Override
     public List<Map> selectOptionList() {
         return brandDao.selectOptionList();
+    }
+
+    /**
+     * 分类审核
+     * @param id
+     */
+    @Override
+    public void updateStatus(Long id,Long[] ids) {
+        //创建分类对象
+        Brand brand = new Brand();
+        //设置状态
+        brand.setStatus(id);
+        //遍历品牌ID
+        for (Long aLong : ids) {
+            brand.setId(aLong);
+            //保存更改
+            brandDao.updateByPrimaryKeySelective(brand);
+        }
     }
 
 }

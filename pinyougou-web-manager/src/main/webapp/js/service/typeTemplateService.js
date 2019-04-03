@@ -28,5 +28,10 @@ app.service('typeTemplateService',function($http){
 	//搜索
 	this.search=function(page,rows,searchEntity){
 		return $http.post('../typeTemplate/search.do?page='+page+"&rows="+rows, searchEntity);
-	}    	
+	}
+
+	//审核
+	this.updateStatus=function (id,ids) {
+		return $http.get("../typeTemplate/updateStatus.do?id="+id+"&ids="+ids);
+    }
 });

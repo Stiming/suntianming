@@ -5,6 +5,7 @@ import cn.itcast.core.dao.specification.SpecificationOptionDao;
 import cn.itcast.core.pojo.specification.Specification;
 import cn.itcast.core.pojo.specification.SpecificationOption;
 import cn.itcast.core.pojo.specification.SpecificationOptionQuery;
+import cn.itcast.core.pojo.specification.SpecificationQuery;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -31,8 +32,14 @@ public class SpecificationServiceImpl implements SpecificationService {
     @Override
     public PageResult search(Integer page, Integer rows, Specification specification) {
         PageHelper.startPage(page,rows);
+        //创建条件对象
+        SpecificationQuery specificationQuery = new SpecificationQuery();
+        SpecificationQuery.Criteria criteria = specificationQuery.createCriteria();
+        if (specification.getSpecName() != null && !"".equals(specification.getSpecName())){
+            criteria.andSpecNameLike("%"+specification.getSpecName().trim()+"%");
+        }
 
-        Page<Specification> p = (Page<Specification>) specificationDao.selectByExample(null);
+        Page<Specification> p = (Page<Specification>) specificationDao.selectByExample(specificationQuery);
 
         return new PageResult(p.getTotal(),p.getResult());
     }
@@ -92,5 +99,22 @@ public class SpecificationServiceImpl implements SpecificationService {
     @Override
     public List<Map> selectOptionList() {
         return specificationDao.selectOptionList();
+    }
+
+    /**
+     * 规格审核
+     * @param id
+     * @param ids
+     */
+    @Override
+    public void updateStatus(Long id, Long[] ids) {
+        //创建规格对象
+        Specification specification = new Specification();
+        //设置状态
+        specification.setStatus(id);
+        for (Long aLong : ids) {
+            specification.setId(aLong);
+            specificationDao.updateByPrimaryKeySelective(specification);
+        }
     }
 }
