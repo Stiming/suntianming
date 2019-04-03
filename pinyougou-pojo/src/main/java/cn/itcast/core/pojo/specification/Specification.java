@@ -13,20 +13,7 @@ public class Specification implements Serializable {
      */
     private String specName;
 
-    /**
-     * 状态
-     */
-    private Long status;
-
     private static final long serialVersionUID = 1L;
-
-    public Long getStatus() {
-        return status;
-    }
-
-    public void setStatus(Long status) {
-        this.status = status;
-    }
 
     public Long getId() {
         return id;
